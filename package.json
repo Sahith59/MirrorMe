@@ -4,8 +4,8 @@
   "description": "AI Personality Cloning System - Learn and mirror your unique communication style",
   "main": "app.py",
   "scripts": {
-    "start": "streamlit run app.py",
-    "dev": "streamlit run app.py --server.runOnSave=true",
+    "start": "python -m streamlit run app.py",
+    "dev": "python -m streamlit run app.py --server.runOnSave=true",
     "build": "python -m py_compile app.py",
     "test": "python -m pytest tests/",
     "lint": "flake8 .",
