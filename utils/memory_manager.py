@@ -78,13 +78,14 @@ class MemoryManager:
     
     def get_similar_messages(self, query: str, k: int = 3) -> List[str]:
         """Get similar user messages based on semantic similarity"""
-        if not self.vector_store:
+        if not self.vector_store or not query or not query.strip():
             return []
         
         try:
-            similar_docs = self.vector_store.similarity_search(query, k=k)
+            similar_docs = self.vector_store.similarity_search(query.strip(), k=k)
             return [doc.page_content for doc in similar_docs if doc.page_content != "initialization"]
-        except:
+        except Exception as e:
+            print(f"Error in similarity search: {e}")
             return []
     
     def get_conversation_context(self, limit: int = 10) -> List[Dict]:

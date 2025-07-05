@@ -198,6 +198,44 @@ def chat_page():
         }
         st.session_state.chat_history.append(user_message)
         
+        # Clear input by rerunning
+        st.rerun()
+    
+    # Generate AI response if last message was from user
+    if (st.session_state.chat_history and 
+        st.session_state.chat_history[-1]["role"] == "user" and
+        not st.session_state.typing):
+        
+        # Show typing indicator
+        st.session_state.typing = True
+        
+        # Generate AI response
+        with st.spinner("🤖 Thinking..."):
+            try:
+                last_user_message = st.session_state.chat_history[-1]["content"]
+                ai_response = st.session_state.mirror_agent.generate_response(last_user_message)
+                
+                ai_message = {
+                    "role": "assistant",
+                    "content": ai_response,
+                    "timestamp": datetime.now().strftime("%H:%M")
+                }
+                st.session_state.chat_history.append(ai_message)
+                
+            except Exception as e:
+                st.error(f"Error generating response: {str(e)}")
+                ai_message = {
+                    "role": "assistant",
+                    "content": "I'm having trouble processing that right now. Please try again or check your OpenAI API key configuration.",
+                    "timestamp": datetime.now().strftime("%H:%M")
+                }
+                st.session_state.chat_history.append(ai_message)
+            
+            finally:
+                # Hide typing indicator
+                st.session_state.typing = False
+                st.rerun()
+        
         # Show typing indicator
         st.session_state.typing = True
         st.rerun()

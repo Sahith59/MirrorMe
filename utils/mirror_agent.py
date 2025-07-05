@@ -47,15 +47,22 @@ class MirrorAgent:
     
     def generate_response(self, user_input: str) -> str:
         """Generate a response that mirrors the user's style"""
+        if not user_input or not user_input.strip():
+            return "I didn't receive any message. Could you please try again?"
+        
+        # Validate API key
+        if not Config.OPENAI_API_KEY or Config.OPENAI_API_KEY == "your-openai-api-key-here":
+            return "⚠️ OpenAI API key not configured. Please check your .env file and add a valid API key."
+        
         # Add user message to memory
-        self.memory_manager.add_message("user", user_input)
+        self.memory_manager.add_message("user", user_input.strip())
         
         # Check if we need to update personality profile
         self._maybe_update_personality()
         
         # Get context for response generation
         personality_context = self._get_personality_context()
-        similar_messages = self.memory_manager.get_similar_messages(user_input, k=3)
+        similar_messages = self.memory_manager.get_similar_messages(user_input.strip(), k=3)
         conversation_context = self._get_conversation_context()
         
         # Generate response
@@ -65,7 +72,7 @@ class MirrorAgent:
                 personality_context=personality_context,
                 similar_messages=self._format_similar_messages(similar_messages),
                 conversation_context=conversation_context,
-                input=user_input
+                input=user_input.strip()
             )
             
             # Generate response using invoke method
@@ -77,14 +84,17 @@ class MirrorAgent:
             else:
                 response_text = str(response)
             
+            # Clean up response
+            response_text = response_text.strip()
+            if not response_text:
+                response_text = "I'm still learning about your communication style. Could you tell me more?"
+            
             # Add AI response to memory
             self.memory_manager.add_message("assistant", response_text)
             
-            return response_text.strip()
+            return response_text
             
         except Exception as e:
-            print(f"Error generating response: {e}")
-            return "I'm still learning about your communication style. Could you tell me more?"
     
     def _maybe_update_personality(self):
         """Update personality profile if we have enough new messages"""
