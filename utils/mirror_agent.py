@@ -95,6 +95,8 @@ class MirrorAgent:
             return response_text
             
         except Exception as e:
+            print(f"Error generating response: {e}")
+            return "I'm still learning about your communication style. Could you tell me more?"
     
     def _maybe_update_personality(self):
         """Update personality profile if we have enough new messages"""
