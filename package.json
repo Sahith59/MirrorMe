@@ -1,0 +1,34 @@
+{
+  "name": "mirrorme",
+  "version": "1.0.0",
+  "description": "AI Personality Cloning System - Learn and mirror your unique communication style",
+  "main": "app.py",
+  "scripts": {
+    "start": "streamlit run app.py",
+    "dev": "streamlit run app.py --server.runOnSave=true",
+    "build": "python -m py_compile app.py",
+    "test": "python -m pytest tests/",
+    "lint": "flake8 .",
+    "format": "black ."
+  },
+  "keywords": [
+    "ai",
+    "personality",
+    "cloning",
+    "machine-learning",
+    "nlp",
+    "streamlit",
+    "openai",
+    "langchain"
+  ],
+  "author": "Sahith Reddy Thummala",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sahithreddythummala/MirrorME"
+  },
+  "bugs": {
+    "url": "https://github.com/sahithreddythummala/MirrorME/issues"
+  },
+  "homepage": "https://github.com/sahithreddythummala/MirrorME#readme"
+}
